@@ -2,12 +2,12 @@ package com.example.sqlite_example;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,21 +28,29 @@ public class MainActivity extends AppCompatActivity {
     private CustomAdapter mAdapter;
     private DrawerLayout drawerLayout;
     private View drawerView;
+    private Button btn_drawer_open;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+
         setInit();
     }
+
 
     private void setInit() {
         mDBHelper = new DBHelper(this);
         mRv_todo = findViewById(R.id.rv_todo);
         mBtn_write = findViewById(R.id.btn_write);
         mTodoItems = new ArrayList<>();
-
+        drawerLayout = (DrawerLayout)findViewById(R.id.activity_main);
+        drawerView = (View)findViewById(R.id.drawer);
+        btn_drawer_open= (Button)findViewById(R.id.btn_drawer_open);
 
         // loadrecent DB
         LoadRecentDB();
@@ -90,59 +98,16 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.activity_main);
-        drawerView = (View) findViewById(R.id.drawer);
-
-        Button btn_open = (Button)findViewById(R.id.btn_close);
-        Button btn_menu = (Button)findViewById(R.id.btn_menu);
-
-        btn_open.setOnClickListener(new View.OnClickListener() {
+        btn_drawer_open.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 drawerLayout.openDrawer(drawerView);
             }
         });
 
-        drawerLayout.setDrawerListener(listener);
-        drawerView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                return true;
-            }
-        });
-
-        Button btn_close =(Button)findViewById(R.id.btn_close);
-        btn_close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                drawerLayout.closeDrawers();
-            }
-        });
+        //drawerLayout.setDrawerListener(listener);
     }
 
-
-    // Drawer 관련
-    DrawerLayout.DrawerListener listener =new DrawerLayout.DrawerListener() {
-        @Override
-        public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-
-        }
-
-        @Override
-        public void onDrawerOpened(@NonNull View drawerView) {
-
-        }
-
-        @Override
-        public void onDrawerClosed(@NonNull View drawerView) {
-
-        }
-
-        @Override
-        public void onDrawerStateChanged(int newState) {
-
-        }
-    };
 
 
     private void LoadRecentDB() {
